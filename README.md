@@ -21,11 +21,21 @@ vps-ansible/
 - SSH access to target VPS
 
 ## Installation
-```bash
-git clone https://github.com/harrinsonmb/vps-ansible.git
-cd vps-ansible
-docker compose up -d
-```
+
+1. Clone the vps-ansible project:
+
+    ```bash
+    git clone https://github.com/harrinsonmb/vps-ansible.git
+    cd vps-ansible
+    ```
+
+2. Copy the sample configuration file to create your own:
+
+    ```bash
+    cp inventory/host_vars/vps.sample.yml inventory/host_vars/vps.yml
+    ```
+
+3. Edit `inventory/host_vars/vps.yml` with your VPS details.
 
 ## Usage
 ```bash

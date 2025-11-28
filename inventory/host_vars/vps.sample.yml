@@ -1,0 +1,4 @@
+ssh_user: linuxuser
+ssh_host: example.com
+ssh_port_default: 22
+ssh_port_final: 2222
