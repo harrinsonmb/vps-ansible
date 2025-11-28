@@ -44,8 +44,8 @@
   command: setcap cap_net_bind_service=ep {{ rootlesskit_path.stdout }}
   become: true
 
-- name: Reiniciar Docker
-  become: true
+- name: Reiniciar Docker rootless (systemd --user)
   systemd:
     name: docker
     state: restarted
+    scope: user
