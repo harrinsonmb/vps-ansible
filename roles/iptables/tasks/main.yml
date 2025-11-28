@@ -1,0 +1,20 @@
+- name: Instalar iptables-persistent
+  apt:
+    name: iptables-persistent
+    state: present
+  become: true
+
+- name: Copiar reglas de firewall
+  template:
+    src: rules.v4.j2
+    dest: /etc/iptables/rules.v4
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+  register: iptables_rules_copied
+
+- name: Recargar reglas
+  command: iptables-restore /etc/iptables/rules.v4
+  become: true
+  when: iptables_rules_copied.changed

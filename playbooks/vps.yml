@@ -1,0 +1,15 @@
+- name: Autodetectar y conectar con puerto SSH correcto
+  hosts: servers
+  gather_facts: false
+  tasks:
+    - name: Incluir detección de puerto SSH
+      include_tasks: "tasks/detect_ssh_port.yml"  # ← Ruta relativa al playbook
+
+- hosts: servers
+  roles:
+    - common
+    - ssh_hardening
+    - iptables
+    - vsftpd
+    - docker
+    - fail2ban

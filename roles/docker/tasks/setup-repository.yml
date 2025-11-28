@@ -1,0 +1,58 @@
+---
+- name: Desinstalar versiones antiguas de Docker
+  apt:
+    name:
+      - docker.io
+      - docker-compose
+      - docker-doc
+      - podman-docker
+      - containerd
+      - runc
+    state: absent
+    purge: yes
+
+- name: Actualizar el cache de apt
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+  become: true
+
+- name: Instalar paquetes necesarios
+  apt:
+    name:
+      - ca-certificates
+      - curl
+    state: present
+  become: true
+
+- name: Crear directorio /etc/apt/keyrings
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+  become: true
+
+- name: Descargar la GPG key de Docker
+  get_url:
+    url: https://download.docker.com/linux/debian/gpg
+    dest: /etc/apt/keyrings/docker.asc
+    mode: '0644'
+  become: true
+
+- name: Crear repositorio Docker con tee
+  shell: |
+    tee /etc/apt/sources.list.d/docker.sources <<EOF
+    Types: deb
+    URIs: https://download.docker.com/linux/debian
+    Suites: $(. /etc/os-release && echo "$VERSION_CODENAME")
+    Components: stable
+    Signed-By: /etc/apt/keyrings/docker.asc
+    EOF
+  become: true
+  changed_when: false
+
+
+- name: Actualizar cache de apt nuevamente con el repositorio de Docker
+  apt:
+    update_cache: yes
+  become: true

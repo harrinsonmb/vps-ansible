@@ -1,0 +1,51 @@
+- name: Instalar paquetes necesarios
+  apt:
+    name:
+      - uidmap
+    state: present
+  become: true
+
+#systemctl disable --now docker.service docker.socket
+- name: Deshabilitar y detener servicios de Docker
+  systemd:
+    name: "{{ item }}"
+    enabled: false
+    state: stopped
+  loop:
+    - docker.service
+    - docker.socket
+  become: true
+
+- name: Eliminar docker.sock
+  file:
+    path: /var/run/docker.sock
+    state: absent
+  become: true
+
+- name: Configurar Docker para rootless
+  command: dockerd-rootless-setuptool.sh install
+  become: false
+
+- name: Habilitar linger para el usuario "{{ ansible_user }}"
+  command: loginctl enable-linger {{ ansible_user }}
+
+- name: Añadir DOCKER_HOST a ~/.bashrc
+  lineinfile:
+    path: ~/.bashrc
+    regexp: '^export DOCKER_HOST='
+    line: 'export DOCKER_HOST=unix:///run/user/1000/docker.sock'
+    create: yes
+
+- name: Obtener ruta de rootlesskit
+  command: which rootlesskit
+  register: rootlesskit_path
+
+- name: Otorgar permiso para puertos privilegiados
+  command: setcap cap_net_bind_service=ep {{ rootlesskit_path.stdout }}
+  become: true
+
+- name: Reiniciar Docker
+  become: true
+  systemd:
+    name: docker
+    state: restarted

@@ -1,0 +1,27 @@
+- name: Instalar vsftpd
+  apt:
+    name: vsftpd
+    state: present
+  become: true
+
+- name: Copiar configuración de vsftpd
+  template:
+    src: vsftpd.conf.j2
+    dest: /etc/vsftpd.conf
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+
+- name: Reiniciar servicio vsftpd
+  command: systemctl restart vsftpd
+  become: true
+
+- name: Crear archivo de log para vsftpd
+  file:
+    path: /var/log/vsftpd.log
+    state: touch
+    owner: root
+    group: root
+    mode: '0600'
+  become: true

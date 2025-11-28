@@ -1,0 +1,36 @@
+*filter
+
+# Política por defecto: DROP
+:INPUT DROP [0:0]
+:FORWARD DROP [0:0]
+:OUTPUT ACCEPT [0:0]
+
+# Reglas básicas - tráfico establecido y relacionado
+-A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+
+# Reglas LOOPBACK - tráfico interno completo
+-A INPUT -i lo -j ACCEPT
+-A OUTPUT -o lo -j ACCEPT
+
+# SSH en puerto {{ ssh_port_final }}
+-A INPUT -p tcp --dport {{ ssh_port_final }} -j ACCEPT
+
+# HTTP (puerto 80)
+-A INPUT -p tcp --dport 80 -j ACCEPT
+
+# HTTPS (puerto 443)
+-A INPUT -p tcp --dport 443 -j ACCEPT
+
+# FTP (puerto 21)
+-A INPUT -p tcp --dport 21 -j ACCEPT
+
+# FTP Pasivo (rango 40000:41000)
+-A INPUT -p tcp --dport 40000:41000 -j ACCEPT
+
+# ICMP (ping) - opcional, recomendado para troubleshooting
+-A INPUT -p icmp -j ACCEPT
+
+# Logging de paquetes rechazados (opcional)
+-A INPUT -m limit --limit 3/min -j LOG --log-prefix "iptables_INPUT_denied: " --log-level 4
+
+COMMIT

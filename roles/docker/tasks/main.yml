@@ -1,0 +1,9 @@
+---
+- name: Añadir repositorio Docker
+  include_tasks: setup-repository.yml
+
+- name: Instalar Docker
+  include_tasks: install-docker.yml
+
+- name: Configurar Docker para rootless
+  include_tasks: setup-rootless.yml

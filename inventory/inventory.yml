@@ -1,0 +1,9 @@
+# inventory/inventory.yml
+all:
+  children:
+    servers:
+      hosts:
+        vps:
+          ansible_host: "{{ ssh_host }}"
+          ansible_user: "{{ ssh_user }}"
+          ansible_port: "{{ ssh_port_default }}"

@@ -1,0 +1,11 @@
+services:
+  ansible-playbook:
+    build: .
+    container_name: ansible-playbook
+    volumes:
+      - ~/.ssh:/root/.ssh
+      - ./playbooks:/ansible/playbooks
+      - ./roles:/ansible/roles
+      - ./inventory:/ansible/inventory
+      - ./collections:/ansible/collections
+      - ./ansible.cfg:/ansible/ansible.cfg

@@ -1,0 +1,38 @@
+---
+- name: Configurar ansible_port con el puerto final
+  set_fact:
+    ansible_port: "{{ ssh_port_final | default(2222) }}"
+
+- name: Probar puerto final SSH
+  wait_for:
+    state: started
+    timeout: 3
+  ignore_errors: true
+  ignore_unreachable: true
+  register: test_final_port
+
+- name: Configurar ansible_port con el puerto por defecto
+  set_fact:
+    ansible_port: "{{ ssh_port_default }}"
+  when: test_final_port is failed or test_final_port is unreachable
+
+- name: Probar puerto por defecto SSH
+  wait_for:
+    port: "{{ ssh_port_default | default(22) }}"
+    state: started
+    timeout: 3
+  ignore_errors: true
+  ignore_unreachable: true
+  register: test_default_port
+  when: test_final_port is failed or test_final_port is unreachable
+
+- name: Fallar si no hay conexión SSH
+  fail:
+    msg: "No se pudo conectar por SSH en puertos {{ ssh_port_default | default(22) }} o {{ ssh_port_final | default(2222) }}"
+  register: ssh_connection_failure
+  when:
+    - test_final_port is failed or test_final_port is unreachable
+    - test_default_port is failed or test_default_port is unreachable
+
+- name: Reconectar con puerto correcto
+  meta: reset_connection
