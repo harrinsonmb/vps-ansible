@@ -27,6 +27,11 @@
 # FTP Pasivo (rango 40000:41000)
 -A INPUT -p tcp --dport 40000:41000 -j ACCEPT
 
+# VPN wireguard
+-A INPUT -p udp --dport 51820 -j ACCEPT
+
+-A INPUT -p tcp --dport 51821 -j ACCEPT
+
 # ICMP (ping) - opcional, recomendado para troubleshooting
 -A INPUT -p icmp -j ACCEPT
 
