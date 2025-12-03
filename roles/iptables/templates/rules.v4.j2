@@ -21,6 +21,9 @@
 # HTTPS (puerto 443)
 -A INPUT -p tcp --dport 443 -j ACCEPT
 
+# HTTP/3 (QUIC sobre UDP)
+-A INPUT -p udp --dport 443 -j ACCEPT
+
 # FTP (puerto 21)
 -A INPUT -p tcp --dport 21 -j ACCEPT
 
