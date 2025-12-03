@@ -5,5 +5,5 @@
 - name: Instalar Docker
   include_tasks: install-docker.yml
 
-- name: Configurar Docker para rootless
-  include_tasks: setup-rootless.yml
+#- name: Configurar Docker para rootless
+#  include_tasks: setup-rootless.yml
