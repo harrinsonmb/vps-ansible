@@ -9,6 +9,7 @@
 -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 
 # Reglas LOOPBACK - tráfico interno completo
+-A INPUT -i lo -j ACCEPT
 -A OUTPUT -o lo -j ACCEPT
 
 # SSH en puerto {{ ssh_port_final }}
