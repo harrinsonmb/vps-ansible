@@ -12,8 +12,8 @@
 -A INPUT -i lo -j ACCEPT
 -A OUTPUT -o lo -j ACCEPT
 
-# SSH en puerto {{ ssh_port_final }}
--A INPUT -p tcp --dport {{ ssh_port_final }} -j ACCEPT
+# SSH en puerto {{ ssh_port_final }} y para el rango {{ docker_subnet }}
+-A INPUT -p tcp -s {{ docker_subnet }} --dport {{ ssh_port_final }} -j ACCEPT
 
 # HTTP (puerto 80)
 -A INPUT -p tcp --dport 80 -j ACCEPT

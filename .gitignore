@@ -1,1 +1,2 @@
 inventory/host_vars/vps.yml
+inventory/group_vars/servers.yml

@@ -38,13 +38,17 @@ vps-ansible/
     cd vps-ansible
     ```
 
-2. Copy the sample configuration file to create your own:
+2. Copy the sample configuration files to create your own:
 
     ```bash
     cp inventory/host_vars/vps.sample.yml inventory/host_vars/vps.yml
+    cp inventory/group_vars/servers.sample.yml inventory/group_vars/servers.yml
     ```
 
 3. Edit `inventory/host_vars/vps.yml` with your VPS details.
+
+
+4. Edit `inventory/group_vars/servers.yml` with your generic details.
 
 ## Usage
 ```bash
